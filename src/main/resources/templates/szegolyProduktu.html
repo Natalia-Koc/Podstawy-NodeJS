@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <title>Szczegóły książki</title>
+</head>
+<body class="container">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Platformy Programowania</a>
+</nav>
+<table border="1" class="table" id="table-szegoly" th:object="${produkt}">
+    <tr>
+        <thead class="thead-dark"><th>ID</th><td th:text="*{id}"></td></thead>
+    </tr>
+        <thead class="thead-dark"><th>Nazwa</th><td th:text="*{nazwa}"></td></thead>
+    </tr>
+    <tr>
+        <thead class="thead-dark"><th>Opis</th><td th:text="*{opis}"></td></thead>
+    </tr>
+    <tr>
+        <thead class="thead-dark"><th>Cena</th><td th:text="*{cena}"></td></thead>
+    </tr>
+    <tr>
+        <thead class="thead-dark"><th>Ocena </th><td><p th:text="*{ocena}"></p></td></thead>
+    </tr>
+    <tr>
+        <thead class="thead-dark"><th>Dostępność produktu</th><td th:text="*{dostepnoscNaMagazynie}"></td></thead>
+    </tr>
+    <tr>
+        <thead class="thead-dark"><th>Kategoria</th><td>
+            <div th:each="feature: ${produkt.kategoria}">
+                [[${feature.name}]]
+            </div>
+        </td></thead>
+    </tr>
+    <tr>
+        <thead class="thead-dark"><th>Dostawa</th>
+        <td>
+            <p th:text="*{Dostawa.getNazwaFirmy()}"/>
+            <p th:text="*{Dostawa.getCzasDostawy()}"/>
+            <p th:text="*{Dostawa.getCena()}"></p>
+        </td></thead>
+    </tr>
+</table>
+<a href="/produkty/showList"  class="btn btn-dark">Powrót</a>
+<div th:replace="/shared/fragments :: footer"></div>
+</body>
+</html>

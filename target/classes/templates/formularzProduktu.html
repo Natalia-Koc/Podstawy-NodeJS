@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Szczegóły książki</title>
+</head>
+<body>
+<div class="container">
+    <div th:replace="/shared/fragments :: menu(add)"></div>
+    <div class="n"></div>
+    <h1>Formularz</h1>
+<form th:method="post" th:action="@{zapisz}" th:object="${produkt}" class="form-control" style="background: none; border: none">
+    <div class="form-group row">
+        <label for="nazwa" class="col-sm-2 col-form-label">Nazwa </label>
+        <div class="col-sm-10">
+            <input th:field="*{nazwa}"  class="form-control" id="nazwa" type="text">
+            <p th:if="${#fields.hasErrors('nazwa')}"
+               th:each="err : ${#fields.errors('nazwa')}" th:text="${err}"></p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="opis" class="col-sm-2 col-form-label">Opis </label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="opis" th:field="*{opis}">
+            <p th:if="${#fields.hasErrors('opis')}" th:each="err : ${#fields.errors('opis')}" th:text="${err}"></p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="cena" class="col-sm-2 col-form-label">Cena </label>
+        <div class="col-sm-10">
+            <input th:field="*{cena}"  class="form-control" id="cena">
+            <p th:if="${#fields.hasErrors('cena')}"
+               th:each="err : ${#fields.errors('cena')}" th:text="${err}"></p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="ocena" class="col-sm-2 col-form-label">Ocena </label>
+        <div class="col-sm-10">
+            <input th:field="*{ocena}"  class="form-control" id="ocena">
+            <p th:if="${#fields.hasErrors('ocena')}"
+               th:each="err : ${#fields.errors('ocena')}" th:text="${err}"></p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="select" class="col-sm-2 col-form-label">Dostawa</label>
+        <div class="col-sm-10">
+        <select class="custom-select" th:field="*{dostawa.dostawaId}" id="select">
+            <option value="-1">Wybierz dostawe</option>
+            <option th:each="d:${opcjeDostawy}" th:value="${d.dostawaId}">
+                [[${d.nazwaFirmy}]]-[[${d.czasDostawy}]]-[[${d.cena}]]zł
+            </option>
+        </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Kategoria</label>
+        <div class="col-sm-10">
+            <div th:each="dziedzina:${kategorie}" class="custom-control custom-checkbox">
+                <input type="checkbox" th:field="*{kategoria}" th:value="${dziedzina.id}"
+                       class="custom-control-input" th:id="${dziedzina}" >
+                <label class="custom-control-label" th:for="${dziedzina}" th:text="${dziedzina.name}"></label>
+            </div>
+            <small style="color: red" th:if="${#fields.hasErrors('kategoria')}"
+                   th:each="err : ${#fields.errors('kategoria')}" th:text="${err}"/>
+        </div>
+    </div>
+    <div class="custom-control custom-checkbox">
+        <input th:field="*{dostepnoscNaMagazynie}" type="checkbox" class="custom-control-input" id="dostepnoscNaMagazynie" checked>
+        <p th:if="${#fields.hasErrors('dostepnoscNaMagazynie')}"
+           th:each="err : ${#fields.errors('dostepnoscNaMagazynie')}" th:text="${err}"></p>
+        <label class="custom-control-label" for="dostepnoscNaMagazynie">Dostępność produktu</label>
+    </div>
+    <br>
+    <a href="/produkty/showList"  class="btn btn-dark">Powrót</a>
+    <button  type="submit" class="btn btn-danger">Zapisz</button>
+</form>
+</div>
+</body>
+</html>

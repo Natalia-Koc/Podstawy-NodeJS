@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head th:fragment="header-css">
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/webjars/bootstrap/4.5.3/css/bootstrap.min.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" media="screen"
+          th:href="@{/css/platformy.css}"/>
+
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.slim.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/popper.js}" type="module"></script>
+    <script th:src="@{/webjars/bootstrap/4.5.3/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div th:fragment="menu(pageName)" class="menu">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Platformy Programowania</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" th:classappend="${pageName eq 'home'}?'active'">
+                    <a class="nav-link" th:href="@{/}">Strona główna</a>
+                </li>
+                <li class="nav-item" th:classappend="${pageName eq 'showList'}?'active'">
+                    <a class="nav-link" th:href="@{../produkty/showList?clear}">Lista produktów</a>
+                </li>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item" th:classappend="${pageName eq 'add'}?'active'">
+                    <a class="nav-link" th:href="@{../produkty/add}">Dodaj produkt</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav my-2 my-lg-0">
+                <li sec:authorize="isAnonymous()" class="nav-item" th:classappend="${pageName eq 'registration'}?'active'">
+                    <a class="nav-link" th:href="@{../produkty/add}">Zaloguj</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item" th:classappend="${pageName eq 'formularzProduktu'}?'active'">
+                    <form th:action="@{/logout}" id="logout" th:method="post">
+                        <button type="submit" class="btn btn-warning" th:href="@{/logout}">Wyloguj</button>
+                    </form>
+                </li>
+                <li class="nav-item" th:classappend="${pageName eq 'formularzProduktu'}?'active'">
+                    <a class="nav-link" th:href="@{../login}">Zarejestruj</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="stronicowanie">
+    <nav aria-label="..."
+         th:with="
+             mainUrl='showList',
+             prevPageUrl=${mainUrl}+'?page='+${page.number - 1}+'&size='+${page.size},
+             nextPageUrl=${mainUrl}+'?page='+${page.number + 1}+'&size='+${page.size}
+        ">
+        <ul class="pagination" style="float: left;" th:if="${page.totalPages gt 0}">
+
+            <li class="page-item" th:classappend="${page.first}?'disabled'">
+                <a class="page-link" th:href="${prevPageUrl}" tabindex="-1">&laquo;</a>
+            </li>
+            <li class="page-item" th:each="pageIdx:${#numbers.sequence(0, page.totalPages-1)}"
+                th:classappend="${pageIdx eq page.number}?'active'">
+                <a class="page-link"
+                   th:href="${mainUrl}+'?page='+${pageIdx}+'&size='+${page.size}">
+                    [[${pageIdx+1}]]
+                    <span th:if="${pageIdx eq page.number}" class="sr-only"></span>
+                </a>
+            </li>
+            <li class="page-item" th:classappend="${page.last}?'disabled'">
+                <a class="page-link" th:href="${nextPageUrl}">&raquo;</a>
+            </li>
+        </ul>
+        <ul class="pagination" style="float: right" th:with="pageSizes=${ {5, 10, 20, 35} }">
+            <li class="page-item" th:each="size:${pageSizes}"
+                th:classappend="${page.size eq size}?'active'">
+                <a class="page-link"
+                   th:href="${mainUrl}+'?page=0&size='+${size}">
+                    [[${size}]]
+                    <span th:if="${size eq page.size}" class="sr-only"></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div id="footer" th:fragment="footer">
+    <footer>
+        <br><br>
+        © 2020 Platformy programowania
+    </footer>
+</div>
+
+<th th:fragment="tableHeader(mainUrl,page,propertyName,label)"
+    th:classappend="${page.sort.getOrderFor(propertyName) eq null ?'sorting_both':
+    (page.sort.getOrderFor(propertyName).ascending?'sorting_desc':'sorting_asc')}">
+    <a th:href="@{${mainUrl}(page=${page.number},size=${page.size},sort=${propertyName}+','
+    +${page.sort.getOrderFor(propertyName) eq null or page.sort.getOrderFor(propertyName).descending?'ASC':'DESC'})}"
+       th:text="${label}">
+    </a>
+</th>
+
+</body>
+</html>

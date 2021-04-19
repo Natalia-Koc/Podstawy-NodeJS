@@ -1,0 +1,47 @@
+body {
+    background-size: cover;
+    background-image: url('../images/syu0CiM.png');
+    background-attachment: fixed;
+}
+
+table {
+    margin-top: 2%;
+    background-color: rgba(240,255,255,0.6);
+}
+
+.index {
+    background-color: rgba(240,255,255,0.6);
+    padding: 2%;
+}
+
+.custom-control-label {
+    color: black;
+}
+.col-sm-2, .col-form-label {
+    color: black;
+}
+#table-szegoly {
+    margin-left: 10%;
+    width: 80%;
+}
+
+.table th.sorting_asc {
+    background-image: url("../images/sort_asc.png");
+    background-size: 20px 20px;
+}
+
+.table th.sorting_desc {
+    background-image: url("../images/sort_desc.png");
+    background-size: 20px 20px;
+}
+
+.table th.sorting_both {
+    background-image: url("../images/sort_both.png");
+    background-size: 30px 30px;
+}
+
+.table th {
+    background-repeat: no-repeat;
+    padding-right: 40px;
+    background-position: center right;
+}

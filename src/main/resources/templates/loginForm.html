@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Formularz logowania</title>
+</head>
+<body class="container">
+<center>
+    <div class="index">
+    <div th:replace="/shared/fragments :: menu(home)"></div>
+    <h1>Please Log In</h1>
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div>
+            <input type="text" name="username" placeholder="Wprowadź login"/>
+        </div>
+        <div>
+            <input type="password" name="password" placeholder="Wprowadź hasło"/>
+        </div>
+        <input type="submit" value="Zaloguj"/>
+    </form>
+    <div th:replace="/shared/fragments :: footer"></div>
+    </div>
+</center>
+</body>
+</html>

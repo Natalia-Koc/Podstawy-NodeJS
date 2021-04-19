@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body class="container">
+<center>
+    <div th:replace="/shared/fragments :: menu(home)"></div>
+    <div class="index">
+        <h1>Sklep Zoologiczny "Lisek"</h1>
+        <p>Sprawdź nasze produkty albo dodaj własny:</p>
+        <ul class="list-group" style="background: none">
+            <li class="list-group-item" style="background: rgba(240,255,255,0.7)">
+                <a href="/produkty/showList">Lista</a></li>
+            <li  sec:authorize="hasRole('ADMIN')" class="list-group-item" style="background:  rgba(240,255,255,0.7)">
+                <a href="/produkty/add">Dodaj nowy</a></li>
+        </ul>
+        <div th:replace="/shared/fragments :: footer"></div>
+    </div>
+</center>
+</body>
+</html>
