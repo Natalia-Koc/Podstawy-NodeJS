@@ -21,6 +21,8 @@ public class User {
     private String password;
     @Transient
     private String passwordConfirm;
+    private String email;
+    //private String activationCode;
     private boolean enabled = false;
 
     @AssertTrue
@@ -28,7 +30,7 @@ public class User {
         return password == null || passwordConfirm == null || password.equals(passwordConfirm);
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -40,4 +42,6 @@ public class User {
         this.username = username;
         this.enabled = enabled;
     }
+
+
 }

@@ -2,6 +2,7 @@ package natalia.koc.sklepZoologiczny.repositories;
 
 import natalia.koc.sklepZoologiczny.controllers.filters.Filter;
 import natalia.koc.sklepZoologiczny.domain.Kategoria;
+import natalia.koc.sklepZoologiczny.domain.Zwierzeta;
 import natalia.koc.sklepZoologiczny.domain.Produkt;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +20,7 @@ public interface ProduktRepozytorium extends JpaRepository<Produkt, Integer>, Jp
             String phrase,
             Float minCena,
             Float maxCena,
-            Float minOcena,
-            Float maxOcena,
+            List<Zwierzeta> zwierzeta,
             List<Kategoria> kategoria,
             Pageable pageable
     );
@@ -33,8 +33,7 @@ public interface ProduktRepozytorium extends JpaRepository<Produkt, Integer>, Jp
             " ) " +
             "AND (:minCena is null OR :minCena <= b.cena)" +
             "AND (:maxCena is null OR :maxCena >= b.cena)" +
-            "AND (:minOcena is null OR :minOcena <= b.ocena)" +
-            "AND (:maxOcena is null OR :maxOcena >= b.ocena)" +
+            "AND (COALESCE(:zwierzeta) is null OR EXISTS (SELECT g FROM b.zwierzeta g WHERE g in :zwierzeta))" +
             "AND (COALESCE(:kategoria) is null OR EXISTS (SELECT g FROM b.kategoria g WHERE g in :kategoria))" +
             ""
     )
@@ -42,8 +41,7 @@ public interface ProduktRepozytorium extends JpaRepository<Produkt, Integer>, Jp
             String phrase,
             Float minCena,
             Float maxCena,
-            Float minOcena,
-            Float maxOcena,
+            List<Zwierzeta> zwierzeta,
             List<Kategoria> kategoria,
             Pageable pageable
     );
@@ -57,8 +55,7 @@ public interface ProduktRepozytorium extends JpaRepository<Produkt, Integer>, Jp
             " ) " +
             "AND (:#{#filter.minCena} is null OR :#{#filter.minCena} <= b.cena)" +
             "AND (:#{#filter.maxCena} is null OR :#{#filter.maxCena} >= b.cena)" +
-            "AND (:#{#filter.minOcena} is null OR :#{#filter.minOcena} <= b.ocena)" +
-            "AND (:#{#filter.maxOcena} is null OR :#{#filter.maxOcena} >= b.ocena)" +
+            "AND (:#{#filter.zwierzetaEmpty} = true OR EXISTS (SELECT g FROM b.zwierzeta g WHERE g in :#{#filter.zwierzeta}))" +
             "AND (:#{#filter.kategoriaEmpty} = true OR EXISTS (SELECT g FROM b.kategoria g WHERE g in :#{#filter.kategoria}))" +
             ""
     )

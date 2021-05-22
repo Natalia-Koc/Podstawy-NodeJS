@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import natalia.koc.sklepZoologiczny.domain.Kategoria;
+import natalia.koc.sklepZoologiczny.domain.Zwierzeta;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.StringUtils;
 
@@ -18,15 +19,12 @@ public class Filter {
     private Float minCena;
     @NumberFormat(style = NumberFormat.Style.CURRENCY)
     private Float maxCena;
-    @NumberFormat(style = NumberFormat.Style.PERCENT)
-    private Float minOcena;
-    @NumberFormat(style = NumberFormat.Style.PERCENT)
-    private Float maxOcena;
+    private List<Zwierzeta> zwierzeta = new ArrayList<>();
     private List<Kategoria> kategoria = new ArrayList<>();
     public QUERY_MODE QueryMode = QUERY_MODE.NAMED_METHOD;
 
     public boolean isEmpty() {
-        return StringUtils.isEmpty(phrase) && minCena == null && maxCena == null && minOcena == null && maxOcena == null;
+        return StringUtils.isEmpty(phrase) && minCena == null && maxCena == null;
     }
 
     public String getPhraseLIKE() {
@@ -37,8 +35,6 @@ public class Filter {
         phrase = "";
         maxCena = null;
         minCena = null;
-        maxOcena = null;
-        minOcena = null;
     }
     public enum QUERY_MODE{
         NAMED_METHOD,
@@ -46,6 +42,9 @@ public class Filter {
         QUERY,
         ENTITY_SpEL_AND_GRAPH,
         CRITERIA
+    }
+    public boolean isZwierzetaEmpty() {
+        return zwierzeta.isEmpty();
     }
     public boolean isKategoriaEmpty() {
         return kategoria.isEmpty();

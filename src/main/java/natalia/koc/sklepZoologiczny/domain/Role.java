@@ -18,9 +18,11 @@ public class Role {
     private Types type;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
+
     public Role(Types type){
         this.type = type;
     }
+
     public static enum Types{
         ROLE_ADMIN,
         ROLE_USER

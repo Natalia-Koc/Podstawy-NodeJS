@@ -2,9 +2,7 @@ package natalia.koc.sklepZoologiczny.domain;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -30,17 +28,4 @@ public class Kategoria {
     public Kategoria(){
         this.produkt = new HashSet<>();//Inicjalizacja zbioru
     }
-
-    /*
-    @Override
-    public boolean equals(Object o) {
-        if(this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Kategoria kategoria = (Kategoria) o;
-        return Objects.equals(id, kategoria.id) &&
-                Objects.equals(name, kategoria.name);
-    }
-
-    @Override
-    public int hashCode() {return Objects.hash(id, name);}*/
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{shared/myLayout}"
+      th:with="pageName='home'">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body class="container">
+<div th:replace="/shared/fragments :: menu(registration)"></div>
+<div layout:fragment="custom-content">
+    <h1>Udało ci się założyć konto! <a href="/login">Zaloguj się !</a></h1>
+</div>
+<div th:replace="/shared/fragments :: footer"></div>
+</body>
+</html>

@@ -1,6 +1,5 @@
 package natalia.koc.sklepZoologiczny.services.impl;
 
-
 import natalia.koc.sklepZoologiczny.config.ProfileName;
 import natalia.koc.sklepZoologiczny.domain.Role;
 import natalia.koc.sklepZoologiczny.repositories.RoleRepository;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
 import java.util.Set;
 

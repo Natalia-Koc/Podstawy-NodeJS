@@ -2,18 +2,23 @@ package natalia.koc.sklepZoologiczny.controllers;
 
 import natalia.koc.sklepZoologiczny.domain.Dostawa;
 import natalia.koc.sklepZoologiczny.domain.Kategoria;
+import natalia.koc.sklepZoologiczny.domain.Zwierzeta;
 import natalia.koc.sklepZoologiczny.domain.Produkt;
 import natalia.koc.sklepZoologiczny.repositories.DostawaRepozytorium;
 import natalia.koc.sklepZoologiczny.repositories.KategoriaRepozytorium;
+import natalia.koc.sklepZoologiczny.repositories.ZwierzetaRepozytorium;
 import natalia.koc.sklepZoologiczny.repositories.ProduktRepozytorium;
+import natalia.koc.sklepZoologiczny.services.ProduktService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -25,7 +30,11 @@ public class ControllerProdukty {
     @Autowired
     private ProduktRepozytorium produktRepozytorium;
     @Autowired
+    private ZwierzetaRepozytorium zwierzetaRepozytorium;
+    @Autowired
     private KategoriaRepozytorium kategoriaRepozytorium;
+    @Autowired
+    private ProduktService produktService;
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/add")
@@ -43,13 +52,12 @@ public class ControllerProdukty {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/zapisz")
-    public String zapisz(@ModelAttribute("produkt") @Valid Produkt produkt, Errors result) {
+    public String zapisz(@ModelAttribute("produkt") @Valid Produkt produkt, Errors result,
+                         MultipartFile multipartFile) throws IOException {
         if(result.hasErrors()) {
             return "formularzProduktu";
         }
-        Integer id = produkt.getDostawa().getDostawaId();
-        produkt.setDostawa(dostawaRepozytorium.findById(id).get());
-        produktRepozytorium.save(produkt);
+        produktService.saveProdukt(produkt, multipartFile);
         return "redirect:/produkty/szegolyProduktu/"+produkt.getId();
     }
 
@@ -59,7 +67,12 @@ public class ControllerProdukty {
         return dostawaRepozytorium.findAll();
     }
 
-    @ModelAttribute("kategorie")
+    @ModelAttribute("zwierzeta")
+    public List<Zwierzeta> loadZwierzeta() {
+        return zwierzetaRepozytorium.findAll();
+    }
+
+    @ModelAttribute("kategoria")
     public List<Kategoria> loadKategorie() {
         return kategoriaRepozytorium.findAll();
     }

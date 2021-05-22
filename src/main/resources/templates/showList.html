@@ -9,6 +9,7 @@
 </head>
 <body class="container">
 <div th:replace="/shared/fragments :: menu(showList)"></div>
+<div class="showList">
 <h1>Lista produktów</h1>
 <form method="post" th:action="@{showList}" th:object="${filter}">
     <div class="form-group row">
@@ -32,24 +33,25 @@
             <input type="text" name="phrase" th:field="*{maxCena}" class="form-control" id="maxCena"
                    placeholder="cena maksymalna">
         </div><br>
-        <div class="col-sm-3">
-            <input type="text" name="phrase" th:field="*{minOcena}" class="form-control" id="minOcena"
-                   placeholder="ocena minimalna">
-        </div>
-        <div class="col-sm-3">
-            <input type="text" name="phrase" th:field="*{maxOcena}" class="form-control" id="maxOcena"
-                   placeholder="ocena maksymalna">
-        </div>
-        <label class="col-sm-1 col-form-label">Kategoria</label>
+
+        <label class="col-sm-1 col-form-label">Zwierze: </label>
         <div class="col-sm-2">
-            <div th:each="dziedzina:${kategorie}" class="custom-control custom-checkbox">
+            <div th:each="dziedzina:${zwierzeta}" class="custom-control custom-checkbox">
+                <input type="checkbox" th:field="*{zwierzeta}" th:value="${dziedzina.id}"
+                       class="custom-control-input" th:id="${dziedzina}" >
+                <label class="custom-control-label" th:for="${dziedzina}" th:text="${dziedzina.name}"></label>
+            </div>
+        </div>
+        <label class="col-sm-1 col-form-label">Kategoria: </label>
+        <div class="col-sm-2">
+            <div th:each="dziedzina:${kategoria}" class="custom-control custom-checkbox">
                 <input type="checkbox" th:field="*{kategoria}" th:value="${dziedzina.id}"
                        class="custom-control-input" th:id="${dziedzina}" >
                 <label class="custom-control-label" th:for="${dziedzina}" th:text="${dziedzina.name}"></label>
             </div>
         </div>
-        <div class="col-sm-3">
-            <button class="btn btn-success">Wyszukaj</button>
+        <div class="col-sm-5" style="text-align: right">
+            <br><button class="btn btn-success">Wyszukaj</button>
             <button class="btn btn-warning" th:name="clear">Wyczyść</button>
         </div>
     </div>
@@ -57,12 +59,11 @@
 
 <div th:replace="/shared/fragments :: stronicowanie"></div>
 <table border="1" class="table">
-    <thead class="thead-light">
+    <thead class="thead-dark">
         <tr>
             <th>Lp.</th>
+            <th>Zdjęcie</th>
             <th th:replace="~{/shared/fragments :: tableHeader('showList',${page},'nazwa','Nazwa')}"></th>
-            <th th:replace="~{/shared/fragments :: tableHeader('showList',${page},'opis','Opis')}"></th>
-            <th th:replace="~{/shared/fragments :: tableHeader('showList',${page},'ocena','Ocena')}"></th>
             <th th:replace="~{/shared/fragments :: tableHeader('showList',${page},'cena','Cena')}"></th>
             <th th:replace="~{/shared/fragments :: tableHeader('showList',${page},'dostepnoscNaMagazynie','Dostępność')}"></th>
             <th sec:authorize="isAuthenticated()">Opcje</th>
@@ -70,14 +71,15 @@
     </thead>
     <tr th:each="Tenprodukt : ${page}">
         <th th:text="(${page.getNumber()} * ${page.size}) + ${TenproduktStat.count}"></th>
+        <th style="width: 170px"><img style="width: 120%" th:src="'data:mime_type;base64,'+${Tenprodukt.photo.getBase64Content()}"/></th>
         <th th:text="${Tenprodukt.nazwa}"></th>
-        <th th:text="${Tenprodukt.opis}"></th>
-        <th th:text="${Tenprodukt.ocena}"><p>/10</p></th>
         <th th:text="${Tenprodukt.cena}"></th>
         <th th:if="${Tenprodukt.dostepnoscNaMagazynie == true}"> Tak </th>
         <th th:if="${Tenprodukt.dostepnoscNaMagazynie == false}"> Nie </th>
         <th sec:authorize="isAuthenticated()">
             <a sec:authorize="hasRole('USER')" th:href="@{szegolyProduktu/{id}(id = ${Tenprodukt.id})}" class="btn btn-success"> Więcej</a>
+            <a sec:authorize="hasRole('USER')" th:href="@{/koszyk/dodajDoKoszyka/{id}/{page}/{size}
+                (id=${Tenprodukt.id}, page=${page.getNumber()}, size=${page.size})}" class="btn btn-primary"> Dodaj_do_koszyka</a>
             <a sec:authorize="hasRole('ADMIN')" th:href="@{{id}(id = ${Tenprodukt.id})}"  class="btn btn-primary"> Edytuj</a>
             <a sec:authorize="hasRole('ADMIN')" th:href="@{usun/{id}/{page}/{size}
                 (id=${Tenprodukt.id}, page=${page.getNumber()}, size=${page.size})}"
@@ -93,5 +95,6 @@
 <a sec:authorize="hasRole('ADMIN')" th:href="@{add}" class="btn btn-success">Nowa</a>
 
 <div th:replace="/shared/fragments :: footer"></div>
+</div>
 </body>
 </html>

@@ -29,16 +29,4 @@ public class produktSpecyfikacje {
             return null;
         };
     }
-    public static Specification<Produkt> findByOcenaRange(Float minOcena, Float maxOcena) {
-        return (root, query, cb) -> {
-            if(minOcena != null && maxOcena != null){
-                return cb.between(root.get("ocena"), minOcena, maxOcena);
-            }else if(minOcena != null){
-                return cb.greaterThanOrEqualTo(root.get("ocena"), minOcena);
-            }else if(maxOcena != null) {
-                return cb.lessThanOrEqualTo(root.get("ocena"), maxOcena);
-            }
-            return null;
-        };
-    }
 }

@@ -2,7 +2,9 @@ package natalia.koc.sklepZoologiczny.controllers;
 
 import natalia.koc.sklepZoologiczny.controllers.filters.Filter;
 import natalia.koc.sklepZoologiczny.domain.Kategoria;
+import natalia.koc.sklepZoologiczny.domain.Zwierzeta;
 import natalia.koc.sklepZoologiczny.repositories.KategoriaRepozytorium;
+import natalia.koc.sklepZoologiczny.repositories.ZwierzetaRepozytorium;
 import natalia.koc.sklepZoologiczny.repositories.ProduktRepozytorium;
 import natalia.koc.sklepZoologiczny.repositories.kryteria.produktSpecyfikacje;
 import org.springframework.data.domain.Page;
@@ -26,11 +28,14 @@ import java.util.List;
 @SessionAttributes({"dostawa", "produkt", "filter"})
 public class ControllerProduktyWyswietlanie {
     private ProduktRepozytorium produktRepozytorium;
+    private ZwierzetaRepozytorium zwierzetaRepozytorium;
     private KategoriaRepozytorium kategoriaRepozytorium;
 
     public ControllerProduktyWyswietlanie(ProduktRepozytorium produktRepozytorium,
+                                          ZwierzetaRepozytorium zwierzetaRepozytorium,
                                           KategoriaRepozytorium kategoriaRepozytorium) {
         this.produktRepozytorium = produktRepozytorium;
+        this.zwierzetaRepozytorium = zwierzetaRepozytorium;
         this.kategoriaRepozytorium = kategoriaRepozytorium;
     }
 
@@ -62,7 +67,7 @@ public class ControllerProduktyWyswietlanie {
                 page = produktRepozytorium.findProduktUsingNameQuery(
                         filter.getPhraseLIKE(),
                         filter.getMinCena(), filter.getMaxCena(),
-                        filter.getMinOcena(), filter.getMaxOcena(),
+                        filter.isZwierzetaEmpty()?null: filter.getZwierzeta(),
                         filter.isKategoriaEmpty()?null: filter.getKategoria(),
                         pageable
                 );
@@ -71,7 +76,7 @@ public class ControllerProduktyWyswietlanie {
                 page = produktRepozytorium.findProduktUsingQuery(
                         filter.getPhraseLIKE(),
                         filter.getMinCena(), filter.getMaxCena(),
-                        filter.getMinOcena(), filter.getMaxOcena(),
+                        filter.isZwierzetaEmpty()?null: filter.getZwierzeta(),
                         filter.isKategoriaEmpty()?null: filter.getKategoria(),
                         pageable
                 );
@@ -83,8 +88,7 @@ public class ControllerProduktyWyswietlanie {
                 page = produktRepozytorium.findAll(
                         Specification.where(
                         produktSpecyfikacje.findByPhrase(filter.getPhraseLIKE()).
-                                and(produktSpecyfikacje.findByPriceRange(filter.getMinCena(), filter.getMaxCena())).
-                                and(produktSpecyfikacje.findByOcenaRange(filter.getMinOcena(), filter.getMaxOcena()))
+                                and(produktSpecyfikacje.findByPriceRange(filter.getMinCena(), filter.getMaxCena()))
                 ), pageable);
                 break;
             default: throw new OperationNotSupportedException(
@@ -120,7 +124,12 @@ public class ControllerProduktyWyswietlanie {
         dataBinder.addCustomFormatter(new CurrencyStyleFormatter(), "cena");
     }
 
-    @ModelAttribute("kategorie")
+    @ModelAttribute("zwierzeta")
+    public List<Zwierzeta> loadZwierzeta() {
+        return zwierzetaRepozytorium.findAll();
+    }
+
+    @ModelAttribute("kategoria")
     public List<Kategoria> loadKategorie() {
         return kategoriaRepozytorium.findAll();
     }

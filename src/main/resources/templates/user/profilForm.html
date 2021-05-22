@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{shared/myLayout}"
+      th:with="pageName='home'">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body  class="container">
+<div th:replace="/shared/fragments :: menu(registration)"></div>
+<div layout:fragment="custom-content">
+    <h1>Zarejestruj się!</h1>
+    <form th:action="@{/user/registrationProfil}" method="post" th:object="${userCommand}">
+        <div>
+            <input type="text" name="imie" placeholder="Imie"  th:field="*{imie}"/>
+            <input type="hidden" th:field="*{id}">
+        </div>
+        <div>
+            <input type="text" name="nazwisko" placeholder="Nazwisko"  th:field="*{nazwisko}"/>
+        </div>
+        <div>
+            <input type="text" name="telefon" placeholder="Numer telefonu"  th:field="*{telefon}"/>
+        </div>
+        <div>
+            <input type="text" name="adres" placeholder="Adres do korespondencji"  th:field="*{adres}"/>
+        </div>
+        <input type="submit" value="Zapisz"/>
+    </form>
+</div>
+<div th:replace="/shared/fragments :: footer"></div>
+</body>
+</html>
