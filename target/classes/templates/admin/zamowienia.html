@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <title>Szczegóły książki</title>
+</head>
+<body class="container">
+<div th:replace="/shared/fragments :: menu(zamowienia)"></div>
+
+<br>
+<h3>Zamówienia:</h3>
+<table border="1" class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th>Lp.</th>
+        <th>Nr. zamówienia</th>
+        <th>Data zamówienia</th>
+        <th>Kwota</th>
+        <th>Przewidywany czas dostawy</th>
+        <th>Stan zamowienia</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tr th:each="Tenprodukt : ${historia}">
+        <th th:text="${TenproduktStat.count}"></th>
+        <th th:text="${Tenprodukt.nrZamowienia}"></th>
+        <th th:text="${Tenprodukt.dataZamowienia}"></th>
+        <th th:text="${Tenprodukt.cena}"></th>
+        <th th:text="${Tenprodukt.przewidywanyCzasDostawy}"></th>
+        <th th:text="${Tenprodukt.stanZamowienia}"></th>
+        <th style="width: 5px">
+            <div th:if="${Tenprodukt.stanZamowienia != 'Wysłane'}">
+                <a th:href="@{/admin/zmienStan/{id}(id=${Tenprodukt.id})}" class="btn btn-primary">Aktualizuj_stan</a>
+            </div>
+            <a th:href="@{/admin/usunHistorie/{id}(id=${Tenprodukt.id})}" class="btn btn-light">x</a>
+        </th>
+    </tr>
+</table>
+
+<div th:replace="/shared/fragments :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Lista produktów</title>
+</head>
+<body class="container">
+<div th:replace="/shared/fragments :: menu(koszyk)"></div>
+<div class="showList">
+    <h1>Twoje zamówienie:</h1>
+
+    <table border="1" class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>Lp.</th>
+            <th>Produkt</th>
+            <th>Ilość</th>
+            <th>Cena</th>
+        </tr>
+        </thead>
+        <tr th:each="Tenprodukt : ${koszyk}">
+            <th th:text="${TenproduktStat.count}"></th>
+            <th th:text="${Tenprodukt.nazwa}"></th>
+            <th th:text="${Tenprodukt.ilosc}"></th>
+            <th th:text="${Tenprodukt.cena}"></th>
+        </tr>
+        <tr><th colspan="5">
+            <p style="text-align: right">Kwota do zapłaty:  <b th:text="${kwota}"/> zł</p>
+        </th></tr>
+    </table>
+
+    <h2>Dane do przelewu:</h2>
+    <table border="1" class="table" id="table-szegoly">
+        <tr>
+            <thead class="thead-dark"><th>Nazwa odbiorcy </th><td>Sklep Zoologiczny - Lisek</td></thead>
+        </tr>
+        <tr>
+            <thead class="thead-dark"><th>Numer konta </th><td>12 3456 7891 2345 6789 1234 5678</td></thead>
+        </tr>
+        <tr>
+            <thead class="thead-dark"><th>Kwota </th><td th:text="${kwota}"></td></thead>
+        </tr>
+        <tr>
+            <thead class="thead-dark"><th>Tytuł przelewu </th><td>Numer zamowienia: <b  th:text="${nrZam}"/></td></thead>
+        </tr>
+    </table>
+
+    <div th:replace="/shared/fragments :: footer"></div>
+</div>
+</body>
+</html>

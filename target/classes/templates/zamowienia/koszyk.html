@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:replace="/shared/fragments :: header-css"></div>
+    <meta charset="UTF-8">
+    <title>Lista produktów</title>
+</head>
+<body class="container">
+<div th:replace="/shared/fragments :: menu(koszyk)"></div>
+<div class="showList">
+    <h1>Koszyk</h1>
+
+    <table border="1" class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>Lp.</th>
+            <th>Produkt</th>
+            <th>Ilość</th>
+            <th>Cena</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tr th:each="Tenprodukt : ${koszyk}">
+            <th th:text="${TenproduktStat.count}"></th>
+            <th th:text="${Tenprodukt.nazwa}"></th>
+            <th th:text="${Tenprodukt.ilosc}"></th>
+            <th th:text="${Tenprodukt.cena}"></th>
+            <th style="width: 5px">
+                <a th:href="@{usunKoszyk/{id}(id=${Tenprodukt.id})}" class="btn btn-light">x</a>
+            </th>
+        </tr>
+        <tr><th colspan="5">
+            <p style="text-align: right">Kwota do zapłaty:  <b th:text="${kwota}"/> zł</p>
+        </th></tr>
+    </table>
+    <form th:method="post" th:action="@{zamowienie}" th:object="${dostawa}" style="text-align: right">
+        <select>
+            <option value="-1">Wybierz dostawe</option>
+            <div><option th:each="dostawa: ${dostawa}" th:value="${dostawa.dostawaId}">
+                [[${dostawa.nazwaFirmy}]]-[[${dostawa.czasDostawy}]]-[[${dostawa.cena}]]zł
+            </option></div>
+        </select><br><br>
+        <input type="submit" value="Złóż zamówienie" class="btn btn-dark"/>
+    </form>
+    <div th:replace="/shared/fragments :: footer"></div>
+</div>
+</body>
+</html>

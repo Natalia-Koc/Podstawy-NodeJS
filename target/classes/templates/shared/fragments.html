@@ -35,19 +35,28 @@
                 <li sec:authorize="hasRole('ADMIN')" class="nav-item" th:classappend="${pageName eq 'add'}?'active'">
                     <a class="nav-link" th:href="@{../produkty/add}">Dodaj produkt</a>
                 </li>
+                <li sec:authorize="hasRole('USER')" class="nav-item" th:classappend="${pageName eq 'profil'}?'active'">
+                    <a class="nav-link" th:href="@{/user/profil}">Moj profil</a>
+                </li>
+                <li sec:authorize="hasRole('USER')" class="nav-item" th:classappend="${pageName eq 'koszyk'}?'active'">
+                    <a class="nav-link" th:href="@{/koszyk/koszyk}">Koszyk</a>
+                </li>
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item" th:classappend="${pageName eq 'zamowienia'}?'active'">
+                    <a class="nav-link" th:href="@{/admin/zamowienia}">Zamowienia</a>
+                </li>
             </ul>
 
             <ul class="navbar-nav my-2 my-lg-0">
-                <li sec:authorize="isAnonymous()" class="nav-item" th:classappend="${pageName eq 'registration'}?'active'">
-                    <a class="nav-link" th:href="@{../produkty/add}">Zaloguj</a>
+                <li sec:authorize="isAnonymous()" class="nav-item" th:classappend="${pageName eq 'login'}?'active'">
+                    <a class="nav-link" th:href="@{../login}">Zaloguj</a>
                 </li>
-                <li sec:authorize="isAuthenticated()" class="nav-item" th:classappend="${pageName eq 'formularzProduktu'}?'active'">
+                <li sec:authorize="isAuthenticated()" class="nav-item" th:classappend="${pageName eq 'logout'}?'active'">
                     <form th:action="@{/logout}" id="logout" th:method="post">
-                        <button type="submit" class="btn btn-warning" th:href="@{/logout}">Wyloguj</button>
+                        <button type="submit" class="btn btn-warning" th:href="@{../logout}">Wyloguj</button>
                     </form>
                 </li>
-                <li class="nav-item" th:classappend="${pageName eq 'formularzProduktu'}?'active'">
-                    <a class="nav-link" th:href="@{../login}">Zarejestruj</a>
+                <li sec:authorize="isAnonymous()" class="nav-item" th:classappend="${pageName eq 'registration'}?'active'">
+                    <a class="nav-link" th:href="@{../user/registration}">Zarejestruj</a>
                 </li>
             </ul>
         </div>
